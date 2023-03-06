@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 定义 UUID 及 伪装路径,请自行修改.(注意:伪装路径以 / 符号开始,为避免不必要的麻烦,请不要使用特殊符号.)
-UUID=${UUID:-'77ecb2a7-c3ac-4901-a033-0ca76aed0587'}
+UUID=${UUID:-'de04add9-5c68-8bab-950c-08cd5320df18'}
 VMESS_WSPATH=${VMESS_WSPATH:-'/vmess'}
 VLESS_WSPATH=${VLESS_WSPATH:-'/vless'}
 TROJAN_WSPATH=${TROJAN_WSPATH:-'/trojan'}
@@ -10,11 +10,11 @@ sed -i "s#UUID#$UUID#g;s#VMESS_WSPATH#${VMESS_WSPATH}#g;s#VLESS_WSPATH#${VLESS_W
 sed -i "s#VMESS_WSPATH#${VMESS_WSPATH}#g;s#VLESS_WSPATH#${VLESS_WSPATH}#g;s#TROJAN_WSPATH#${TROJAN_WSPATH}#g;s#SS_WSPATH#${SS_WSPATH}#g" /etc/nginx/nginx.conf
 sed -i "s#RELEASE_RANDOMNESS#${RELEASE_RANDOMNESS}#g" /etc/supervisor/conf.d/supervisord.conf
 
-# 设置 nginx 伪装站
-rm -rf /usr/share/nginx/*
-wget https://github.com/wwrrtt/argo--x/raw/main/web.zip -O /usr/share/nginx/web.zip
-unzip -o "/usr/share/nginx/web.zip" -d /usr/share/nginx/html
-rm -f /usr/share/nginx/web.zip
+# 设置 nginx 伪装站 
+ rm -rf /usr/share/nginx/* 
+ wget https://github.com/wwrrtt/argo--x/raw/main/web.zip -O /usr/share/nginx/web.zip 
+ unzip -o "/usr/share/nginx/web.zip" -d /usr/share/nginx/html 
+ rm -f /usr/share/nginx/web.zip 
 
 # 伪装 xray 执行文件
 RELEASE_RANDOMNESS=$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 6)
@@ -31,13 +31,13 @@ rm -f config.json
 cloudflared tunnel --url http://localhost:80 --no-autoupdate > argo.log 2>&1 &
 sleep 5 && argo_url=$(cat argo.log | grep -oE "https://.*[a-z]+cloudflare.com" | sed "s#https://##")
 
-vmesslink=$(echo -e '\x76\x6d\x65\x73\x73')://$(echo -n "{\"v\":\"2\",\"ps\":\"Argo_xray_vmess\",\"add\":\"$argo_url\",\"port\":\"443\",\"id\":\"$UUID\",\"aid\":\"0\",\"net\":\"ws\",\"type\":\"none\",\"host\":\"$argo_url\",\"path\":\"$VMESS_WSPATH?ed=2048\",\"tls\":\"tls\"}" | base64 -w 0)
-vlesslink=$(echo -e '\x76\x6c\x65\x73\x73')"://"$UUID"@"$argo_url":443?encryption=none&security=tls&type=ws&host="$argo_url"&path="$VLESS_WSPATH"?ed=2048#Argo_xray_vless"
-trojanlink=$(echo -e '\x74\x72\x6f\x6a\x61\x6e')"://"$UUID"@"$argo_url":443?security=tls&type=ws&host="$argo_url"&path="$TROJAN_WSPATH"?ed2049#Argo_xray_trojan"
+vmlink=$(echo -e '\x76\x6d\x65\x73\x73')://$(echo -n "{\"v\":\"2\",\"ps\":\"Argo_xray_vmess\",\"add\":\"$argo_url\",\"port\":\"443\",\"id\":\"$UUID\",\"aid\":\"0\",\"net\":\"ws\",\"type\":\"none\",\"host\":\"$argo_url\",\"path\":\"$VMESS_WSPATH?ed=2048\",\"tls\":\"tls\"}" | base64 -w 0)
+vllink=$(echo -e '\x76\x6c\x65\x73\x73')"://"$UUID"@"$argo_url":443?encryption=none&security=tls&type=ws&host="$argo_url"&path="$VLESS_WSPATH"?ed=2048#Argo_xray_vless"
+trlink=$(echo -e '\x74\x72\x6f\x6a\x61\x6e')"://"$UUID"@"$argo_url":443?security=tls&type=ws&host="$argo_url"&path="$TROJAN_WSPATH"?ed2049#Argo_xray_trojan"
 
-qrencode -o /usr/share/nginx/html/M$UUID.png $vmesslink
-qrencode -o /usr/share/nginx/html/L$UUID.png $vlesslink
-qrencode -o /usr/share/nginx/html/T$UUID.png $trojanlink
+qrencode -o /usr/share/nginx/html/M$UUID.png $vmlink
+qrencode -o /usr/share/nginx/html/L$UUID.png $vllink
+qrencode -o /usr/share/nginx/html/T$UUID.png $trlink
 
 cat > /usr/share/nginx/html/$UUID.html<<-EOF
 <!DOCTYPE html>
