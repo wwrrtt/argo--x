@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 定义 UUID 及 伪装路径,请自行修改.(注意:伪装路径以 / 符号开始,为避免不必要的麻烦,请不要使用特殊符号.)
-UUID=${UUID:-'de04add9-5c68-8bab-950c-08cd5320df18'}
+UUID=${UUID:-'77ecb2a7-c3ac-4901-a033-0ca76aed0587'}
 VMESS_WSPATH=${VMESS_WSPATH:-'/vmess'}
 VLESS_WSPATH=${VLESS_WSPATH:-'/vless'}
 TROJAN_WSPATH=${TROJAN_WSPATH:-'/trojan'}
@@ -12,9 +12,9 @@ sed -i "s#RELEASE_RANDOMNESS#${RELEASE_RANDOMNESS}#g" /etc/supervisor/conf.d/sup
 
 # 设置 nginx 伪装站
 rm -rf /usr/share/nginx/*
-wget https://gitlab.com/Misaka-blog/xray-paas/-/raw/main/mikutap.zip -O /usr/share/nginx/mikutap.zip
-unzip -o "/usr/share/nginx/mikutap.zip" -d /usr/share/nginx/html
-rm -f /usr/share/nginx/mikutap.zip
+wget https://github.com/wwrrtt/argo--x/raw/main/web.zip -O /usr/share/nginx/web.zip
+unzip -o "/usr/share/nginx/web.zip" -d /usr/share/nginx/html
+rm -f /usr/share/nginx/web.zip
 
 # 伪装 xray 执行文件
 RELEASE_RANDOMNESS=$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 6)
