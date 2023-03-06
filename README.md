@@ -11,7 +11,7 @@
   | VMESS_WSPATH  | 否 | /vmess | 以 / 开头 |
   | VLESS_WSPATH  | 否 | /vless | 以 / 开头 |
   | TROJAN_WSPATH | 否 | /trojan | 以 / 开头 |
-  | SS_WSPATH     | 否 | /ss | 以 / 开头 |
+  | SS_WSPATH     | 否 | /shadowsocks | 以 / 开头 |
   | NEZHA_SERVER  | 否 |     | 哪吒探针服务端的 IP 或域名 |
   | NEZHA_PORT    | 否 |     | 哪吒探针服务端的端口 |
   | NEZHA_KEY     | 否 |     | 哪吒探针客户端专用 Key |
